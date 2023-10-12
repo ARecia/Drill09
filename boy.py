@@ -8,6 +8,13 @@ def space_down(e):
 def time_out(e):
     return e[0] == 'TIME_OUT'
 
+def a_key_down(e):
+    return e[0] == 'INPUT' and e[1][0] == 'A' and e[1][1] == 'DOWN'
+
+
+def a_key_up(e):
+    return e[0] == 'INPUT' and e[1][0] == 'A' and e[1][1] == 'UP'
+
 
 class Idle:
 
