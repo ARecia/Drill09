@@ -128,12 +128,23 @@ class Boy:
         self.image = load_image('animation_sheet.png')
         self.state_machine = StateMachine(self)
         self.state_machine.start()
+        self.auto_run = False
 
     def update(self):
-        self.state_machine.update()
+        if not self.auto_run:
+            self.state_machine.update()
+        else:
+            self.state_machine.handle_event(('A_DOWN',))
 
     def handle_event(self, event):
-        self.state_machine.handle_event(('INPUT', event))
+        if self.auto_run and a_key_up(event):
+            self.auto_run = False
+            self.state_machine.handle_event(('A_UP',))
+        elif not self.auto_run and a_key_down(event):
+            self.auto_run = True
+            self.state_machine.handle_event(('A_DOWN',))
+        else:
+            self.state_machine.handle_event(event)
 
     def draw(self):
         self.state_machine.draw()
