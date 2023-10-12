@@ -1,6 +1,6 @@
 # 이것은 각 상태들을 객체로 구현한 것임.
 
-from pico2d import load_image, get_time
+from pico2d import load_image, get_time, get_canvas_width
 
 def space_down(e):
     return e[0] == 'INPUT' and e[1] == 'SPACE_DOWN'
