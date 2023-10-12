@@ -36,6 +36,41 @@ class Idle:
         boy.image.clip_draw(boy.frame * 100, boy.action * 100, 100, 100, boy.x, boy.y)
         # pass
 
+class AutoRun:
+    @staticmethod
+    def enter(boy):
+        boy.action = 3
+        boy.frame = 0
+        boy.start_time = get_time()
+        boy.speed = 0.5
+        boy.size = 1.0
+        boy.direction = 1  # 1 for right, -1 for left
+
+    @staticmethod
+    def exit(boy):
+        boy.speed = 1.0
+
+    @staticmethod
+    def do(boy):
+        elapsed_time = get_time() - boy.start_time
+        boy.frame = (boy.frame + 1) % 8
+
+        if elapsed_time > 5.0:
+            boy.state_machine.handle_event(('TIME_OUT',))  # Return to Idle
+
+        boy.x += boy.speed * boy.direction
+        boy.size += 0.01
+        boy.size = min(2.0, boy.size)  # Limit maximum size
+
+        if boy.x < 0 or boy.x > get_canvas_width():
+            boy.direction *= -1  # Reverse direction when hitting the screen edge
+
+    @staticmethod
+    def draw(boy):
+        boy.image.clip_composite_draw(boy.frame * 100, 300, 100, 100,
+                                      3.141592 / 2, '', boy.x - 25, boy.y - 25,
+                                      100 * boy.size, 100 * boy.size)
+
 
 class StateMachine:
     def __init__(self, boy):
